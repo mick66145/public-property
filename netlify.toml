@@ -1,0 +1,41 @@
+[build]
+  # 建置指令
+  command = "npm run build"
+  # 建置輸出目錄
+  publish = "dist"
+
+[build.environment]
+  # Node.js 版本
+  NODE_VERSION = "18"
+
+# Vue.js SPA 設定
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 快取設定
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 安全性標頭
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()" 

@@ -1,0 +1,19 @@
+# Vue Router SPA 重定向規則
+# 所有不匹配靜態檔案的路徑都重定向到 index.html
+/*    /index.html   200
+
+# API 路由重定向（如果有後端 API）
+# /api/*  https://your-api-domain.com/api/:splat  200
+
+# 特定路由重定向（可選）
+# /admin/*  /admin/index.html  200
+
+# 處理 404 頁面
+# /404  /404.html  404
+
+# 安全性標頭（可選）
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin 
