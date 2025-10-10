@@ -80,6 +80,10 @@ const zoningOptions = ["市場用地", "一般農業區(特定目的事業用地
           <v-col cols="12" sm="4">
             <v-select label="狀態" v-model="localAsset.matchStatus" :items="statusOptions" />
           </v-col>
+          <!-- 有無使照 -->
+          <v-col cols="12" sm="4">
+            <v-select label="有無使照" v-model="localAsset.hasUsagePermit" :items="['有', '無']" />
+          </v-col>
 
           <!-- 地籍資訊 -->
           <v-col cols="12" sm="4">

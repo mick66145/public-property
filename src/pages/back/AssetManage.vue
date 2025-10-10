@@ -37,6 +37,7 @@ const items = ref([
     currentStatus: "已活化利用",
     notes: "與奇美博物館合作，定期舉辦藝文活動。",
     floorArea: "1樓: 1500\n2樓: 1500\n3樓: 500",
+    hasUsagePermit: "有",
   },
   {
     id: "A002",
@@ -58,6 +59,7 @@ const items = ref([
     currentStatus: "已活化利用",
     notes: "為台南市重要地標之一。",
     floorArea: "1-4樓: 2300",
+    hasUsagePermit: "有",
   },
   {
     id: "A003",
@@ -79,6 +81,7 @@ const items = ref([
     currentStatus: "部分區域低度利用",
     notes: "非賽季期間，周邊停車場可供活動租用。",
     floorArea: null,
+    hasUsagePermit: "無",
   },
   {
     id: "A004",
@@ -100,6 +103,7 @@ const items = ref([
     currentStatus: "已由社會局承租作為社福單位使用。",
     notes: "",
     floorArea: "辦公室A: 800\n辦公室B: 700",
+    hasUsagePermit: "有",
   },
   {
     id: "A005",
@@ -121,6 +125,7 @@ const items = ref([
     currentStatus: "部分空間閒置",
     notes: "不定期公告徵求認養者",
     floorArea: "演藝廳: 3000\n展覽室: 1500",
+    hasUsagePermit: "有",
   },
 ]);
 
@@ -220,6 +225,7 @@ function createAsset() {
     currentStatus: "空置",
     notes: "",
     floorArea: null,
+    hasUsagePermit: "無", // New field
   };
   editDialog.value = true;
 }
