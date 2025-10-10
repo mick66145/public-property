@@ -193,100 +193,97 @@
                   申請資產與需求說明
                 </v-card-title>
                 <v-card-text class="pa-6">
-                  <!-- 資產選擇 -->
-                  <v-row>
-                    <v-col cols="12">
-                      <v-select
-                        v-model="formData.selectedAsset"
-                        :items="availableAssets"
-                        item-title="name"
-                        item-value="id"
-                        label="選擇申請資產"
-                        :rules="[rules.required]"
-                        variant="outlined"
-                        density="compact"
-                        @update:modelValue="onAssetChange"
-                        required
-                      >
-                        <template #item="{ props, item }">
-                          <v-list-item v-bind="props">
-                            <v-list-item-title>{{
-                              item.raw.name
-                            }}</v-list-item-title>
-                            <v-list-item-subtitle>{{
-                              item.raw.location
-                            }}</v-list-item-subtitle>
-                          </v-list-item>
-                        </template>
-                      </v-select>
-                    </v-col>
-                  </v-row>
+                  <v-radio-group v-model="demandType" inline class="mb-4">
+                    <v-radio label="指定現有資產" value="specific" color="primary"></v-radio>
+                    <v-radio label="提出一般需求" value="general" color="primary"></v-radio>
+                  </v-radio-group>
 
-                  <!-- 選中資產資訊顯示 -->
-                  <v-alert
-                    v-if="formData.assetInfo"
-                    type="info"
-                    variant="tonal"
-                    class="mt-4"
-                  >
-                    <div class="d-flex align-center">
-                      <v-icon class="mr-3">mdi-information</v-icon>
-                      <div>
-                        <div class="font-weight-bold">
-                          {{ formData.assetInfo.name }}
+                  <!-- A. 指定現有資產 -->
+                  <div v-if="demandType === 'specific'">
+                    <v-row>
+                      <v-col cols="12">
+                        <v-select v-model="formData.selectedAsset" :items="availableAssets" item-title="name"
+                          item-value="id" label="選擇申請資產" :rules="demandType === 'specific' ? [rules.required] : []"
+                          variant="outlined" density="compact" @update:modelValue="onAssetChange" required>
+                          <template #item="{ props, item }">
+                            <v-list-item v-bind="props">
+                              <v-list-item-title>{{
+                                item.raw.name
+                              }}</v-list-item-title>
+                              <v-list-item-subtitle>{{
+                                item.raw.location
+                              }}</v-list-item-subtitle>
+                            </v-list-item>
+                          </template>
+                        </v-select>
+                      </v-col>
+                    </v-row>
+                    <v-alert v-if="formData.assetInfo" type="info" variant="tonal" class="mt-4">
+                      <div class="d-flex align-center">
+                        <v-icon class="mr-3">mdi-information</v-icon>
+                        <div>
+                          <div class="font-weight-bold">
+                            {{ formData.assetInfo.name }}
+                          </div>
+                          <div class="text-body-2">
+                            {{ formData.assetInfo.location }}
+                          </div>
+                          <v-chip size="small" :color="formData.assetInfo.status === '已活化'
+                            ? 'success'
+                            : 'warning'
+                            " class="mt-1">
+                            {{ formData.assetInfo.status }}
+                          </v-chip>
                         </div>
-                        <div class="text-body-2">
-                          {{ formData.assetInfo.location }}
-                        </div>
-                        <v-chip
-                          size="small"
-                          :color="
-                            formData.assetInfo.status === '已活化'
-                              ? 'success'
-                              : 'warning'
-                          "
-                          class="mt-1"
-                        >
-                          {{ formData.assetInfo.status }}
-                        </v-chip>
                       </div>
-                    </div>
-                  </v-alert>
+                    </v-alert>
+                  </div>
 
-                  <!-- 需求說明 -->
+                  <!-- B. 提出一般需求 -->
+                  <div v-if="demandType === 'general'">
+                    <v-row>
+                      <v-col cols="12" md="6">
+                        <v-radio-group v-model="formData.generalDemand.assetType" inline label="土地或建物"
+                          :rules="demandType === 'general' ? [rules.required] : []">
+                          <v-radio label="土地" value="土地" color="primary"></v-radio>
+                          <v-radio label="建物" value="建物" color="primary"></v-radio>
+                        </v-radio-group>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field v-model="formData.generalDemand.location" label="希望地點"
+                          :rules="demandType === 'general' ? [rules.required] : []" variant="outlined"
+                          density="compact" required></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field v-model="formData.generalDemand.floor" label="希望樓層" variant="outlined"
+                          density="compact"></v-text-field>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-text-field v-model="formData.generalDemand.area" label="面積(㎡)" type="number"
+                          :rules="demandType === 'general' ? [rules.required] : []" variant="outlined"
+                          density="compact" required suffix="㎡"></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </div>
+
+
+                  <!-- 需求說明 (共用) -->
                   <v-row class="mt-4">
                     <v-col cols="12">
-                      <v-select
+                      <v-text-field
                         v-model="formData.purpose"
-                        :items="purposeOptions"
-                        item-title="title"
-                        item-value="value"
-                        label="使用目的"
+                        label="需求用途"
                         :rules="[rules.required]"
                         variant="outlined"
                         density="compact"
+                        placeholder="例如：成立社區長照關懷據點、舉辦社區運動會"
                         required
-                      ></v-select>
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-textarea
-                        v-model="formData.description"
-                        label="詳細說明"
-                        :rules="[rules.required]"
-                        variant="outlined"
-                        rows="4"
-                        placeholder="請詳細說明您的使用需求、活動內容、預期效益等..."
-                        required
-                      ></v-textarea>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        v-model="formData.specialRequirements"
-                        label="特殊需求"
-                        variant="outlined"
-                        rows="3"
-                        placeholder="如需特殊設備、服務或其他協助，請在此說明..."
-                      ></v-textarea>
+                      <v-textarea v-model="formData.description" label="詳細說明(敘明必要性、急迫性及經費來源)"
+                        :rules="[rules.required]" variant="outlined" rows="4"
+                        placeholder="請詳細說明您的使用需求、活動內容、預期效益、經費來源等..." required></v-textarea>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -310,15 +307,11 @@
                       </v-list-item>
                       <v-list-item>
                         <template #prepend>
-                          <v-icon color="error"
-                            >mdi-card-account-details</v-icon
-                          >
+                          <v-icon color="error">mdi-card-account-details</v-icon>
                         </template>
                         <v-list-item-title>身分證明文件</v-list-item-title>
                       </v-list-item>
-                      <v-list-item
-                        v-if="formData.applicantType === 'organization'"
-                      >
+                      <v-list-item v-if="formData.applicantType === 'organization'">
                         <template #prepend>
                           <v-icon color="error">mdi-domain</v-icon>
                         </template>
@@ -327,41 +320,25 @@
                     </v-list>
                   </div>
 
-                  <v-file-input
-                    label="選擇檔案"
-                    variant="outlined"
-                    multiple
-                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                    @update:modelValue="handleFileUpload"
-                    show-size
-                  ></v-file-input>
+                  <v-file-input label="選擇檔案" variant="outlined" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    @update:modelValue="handleFileUpload" show-size></v-file-input>
 
                   <!-- 已上傳檔案清單 -->
                   <div v-if="uploadedFiles.length > 0" class="mt-4">
                     <h4 class="text-h6 mb-3">已上傳檔案：</h4>
                     <v-list>
-                      <v-list-item
-                        v-for="(file, index) in uploadedFiles"
-                        :key="index"
-                      >
+                      <v-list-item v-for="(file, index) in uploadedFiles" :key="index">
                         <template #prepend>
                           <v-icon>mdi-file</v-icon>
                         </template>
                         <v-list-item-title>{{ file.name }}</v-list-item-title>
-                        <v-list-item-subtitle
-                          >{{
-                            Math.round(file.size / 1024)
-                          }}
-                          KB</v-list-item-subtitle
-                        >
+                        <v-list-item-subtitle>{{
+                          Math.round(file.size / 1024)
+                        }}
+                          KB</v-list-item-subtitle>
                         <template #append>
-                          <v-btn
-                            @click="removeFile(index)"
-                            icon="mdi-delete"
-                            size="small"
-                            color="error"
-                            variant="text"
-                          ></v-btn>
+                          <v-btn @click="removeFile(index)" icon="mdi-delete" size="small" color="error"
+                            variant="text"></v-btn>
                         </template>
                       </v-list-item>
                     </v-list>
@@ -376,12 +353,8 @@
                   確認與送出
                 </v-card-title>
                 <v-card-text class="pa-6">
-                  <v-checkbox
-                    v-model="formData.agreeTerms"
-                    color="primary"
-                    :rules="[(v) => !!v || '請同意相關條款']"
-                    required
-                  >
+                  <v-checkbox v-model="formData.agreeTerms" color="primary" :rules="[(v) => !!v || '請同意相關條款']"
+                    required>
                     <template #label>
                       <span>
                         我已詳閱並同意
@@ -393,26 +366,44 @@
                   </v-checkbox>
 
                   <div class="d-flex justify-end ga-4 mt-6">
-                    <v-btn
-                      @click="resetForm"
-                      color="grey"
-                      variant="outlined"
-                      size="large"
-                    >
+                    <v-btn @click="resetForm" color="grey" variant="outlined" size="large">
                       <v-icon class="mr-2">mdi-refresh</v-icon>
                       重置表單
                     </v-btn>
-                    <v-btn
-                      @click="submitForm"
-                      :disabled="!isFormComplete"
-                      :loading="isSubmitting"
-                      color="primary"
-                      size="large"
-                    >
+                    <v-btn @click="submitForm" :disabled="!isFormComplete" :loading="isSubmitting" color="primary"
+                      size="large">
                       <v-icon class="mr-2">mdi-send</v-icon>
                       提交申請
                     </v-btn>
                   </div>
+                </v-card-text>
+              </v-card>
+
+              <!-- 簽名區塊 -->
+              <v-card elevation="4" class="mt-6">
+                <v-card-title class="bg-grey-lighten-2 text-grey-darken-3">
+                  <v-icon class="mr-2">mdi-pencil</v-icon>
+                  承辦單位簽章
+                </v-card-title>
+                <v-card-text class="pa-6">
+                  <v-row>
+                    <v-col cols="12" md="4">
+                      <p class="text-body-1 font-weight-bold mb-2">承辦人：</p>
+                      <div class="signature-line"></div>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <p class="text-body-1 font-weight-bold mb-2">單位主管：</p>
+                      <div class="signature-line"></div>
+                    </v-col>
+                    <v-col cols="12" md="4">
+                      <p class="text-body-1 font-weight-bold mb-2">機關首長：</p>
+                      <div class="signature-line"></div>
+                    </v-col>
+                    <v-col cols="12" class="mt-4">
+                      <p class="text-body-1 font-weight-bold mb-2">聯絡電話：</p>
+                      <div class="signature-line-long"></div>
+                    </v-col>
+                  </v-row>
                 </v-card-text>
               </v-card>
             </v-form>
@@ -430,42 +421,26 @@
                 <v-timeline density="compact" side="end">
                   <v-timeline-item size="small" dot-color="primary">
                     <v-card density="compact" elevation="1">
-                      <v-card-title class="text-body-1 py-2"
-                        >提交申請</v-card-title
-                      >
-                      <v-card-text class="text-body-2 py-1"
-                        >線上填寫申請表單</v-card-text
-                      >
+                      <v-card-title class="text-body-1 py-2">提交申請</v-card-title>
+                      <v-card-text class="text-body-2 py-1">線上填寫申請表單</v-card-text>
                     </v-card>
                   </v-timeline-item>
                   <v-timeline-item size="small" dot-color="grey">
                     <v-card density="compact" elevation="1">
-                      <v-card-title class="text-body-1 py-2"
-                        >文件審核</v-card-title
-                      >
-                      <v-card-text class="text-body-2 py-1"
-                        >相關單位進行審查</v-card-text
-                      >
+                      <v-card-title class="text-body-1 py-2">文件審核</v-card-title>
+                      <v-card-text class="text-body-2 py-1">相關單位進行審查</v-card-text>
                     </v-card>
                   </v-timeline-item>
                   <v-timeline-item size="small" dot-color="grey">
                     <v-card density="compact" elevation="1">
-                      <v-card-title class="text-body-1 py-2"
-                        >審議會議</v-card-title
-                      >
-                      <v-card-text class="text-body-2 py-1"
-                        >召開會議討論</v-card-text
-                      >
+                      <v-card-title class="text-body-1 py-2">審議會議</v-card-title>
+                      <v-card-text class="text-body-2 py-1">召開會議討論</v-card-text>
                     </v-card>
                   </v-timeline-item>
                   <v-timeline-item size="small" dot-color="grey">
                     <v-card density="compact" elevation="1">
-                      <v-card-title class="text-body-1 py-2"
-                        >核准通知</v-card-title
-                      >
-                      <v-card-text class="text-body-2 py-1"
-                        >發送審核結果</v-card-text
-                      >
+                      <v-card-title class="text-body-1 py-2">核准通知</v-card-title>
+                      <v-card-text class="text-body-2 py-1">發送審核結果</v-card-text>
                     </v-card>
                   </v-timeline-item>
                 </v-timeline>
@@ -476,9 +451,7 @@
                 <v-list density="compact">
                   <v-list-item>
                     <template #prepend>
-                      <v-icon color="warning" size="16"
-                        >mdi-alert-circle</v-icon
-                      >
+                      <v-icon color="warning" size="16">mdi-alert-circle</v-icon>
                     </template>
                     <v-list-item-title class="text-body-2">
                       請至少提前30天提出申請
@@ -486,9 +459,7 @@
                   </v-list-item>
                   <v-list-item>
                     <template #prepend>
-                      <v-icon color="warning" size="16"
-                        >mdi-alert-circle</v-icon
-                      >
+                      <v-icon color="warning" size="16">mdi-alert-circle</v-icon>
                     </template>
                     <v-list-item-title class="text-body-2">
                       請確保所有必要文件完整上傳
@@ -496,9 +467,7 @@
                   </v-list-item>
                   <v-list-item>
                     <template #prepend>
-                      <v-icon color="warning" size="16"
-                        >mdi-alert-circle</v-icon
-                      >
+                      <v-icon color="warning" size="16">mdi-alert-circle</v-icon>
                     </template>
                     <v-list-item-title class="text-body-2">
                       商業用途需另行評估收費標準
@@ -514,25 +483,19 @@
                     <template #prepend>
                       <v-icon color="primary" size="16">mdi-phone</v-icon>
                     </template>
-                    <v-list-item-title class="text-body-2"
-                      >06-2991111</v-list-item-title
-                    >
+                    <v-list-item-title class="text-body-2">06-2991111</v-list-item-title>
                   </v-list-item>
                   <v-list-item>
                     <template #prepend>
                       <v-icon color="primary" size="16">mdi-email</v-icon>
                     </template>
-                    <v-list-item-title class="text-body-2"
-                      >apply@tainan.gov.tw</v-list-item-title
-                    >
+                    <v-list-item-title class="text-body-2">apply@tainan.gov.tw</v-list-item-title>
                   </v-list-item>
                   <v-list-item>
                     <template #prepend>
                       <v-icon color="primary" size="16">mdi-clock</v-icon>
                     </template>
-                    <v-list-item-title class="text-body-2"
-                      >週一至週五 08:00-17:30</v-list-item-title
-                    >
+                    <v-list-item-title class="text-body-2">週一至週五 08:00-17:30</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-card-text>
@@ -550,9 +513,7 @@
           申請提交成功
         </v-card-title>
         <v-card-text class="text-center pa-6">
-          <v-icon color="success" size="80" class="mb-4"
-            >mdi-check-circle-outline</v-icon
-          >
+          <v-icon color="success" size="80" class="mb-4">mdi-check-circle-outline</v-icon>
           <h3 class="text-h5 mb-3">感謝您的申請！</h3>
           <p class="text-body-1 mb-4">
             您的申請已成功提交，申請編號為：<strong>APP-2024-0001</strong>
@@ -581,9 +542,12 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
+// 需求類型: specific (指定現有資產) | general (提出一般需求)
+const demandType = ref("specific");
+
 // 表單資料
 const formData = ref({
-  // 申請類型
+  // 申請人類型
   applicantType: "individual", // individual | organization
 
   // 個人資料
@@ -606,20 +570,21 @@ const formData = ref({
     address: "",
   },
 
-  // 申請資產
+  // A. 指定資產
   selectedAsset: "",
   assetInfo: null,
 
-  // 使用期間
-  startDate: "",
-  endDate: "",
+  // B. 一般需求
+  generalDemand: {
+    assetType: "建物",
+    location: "",
+    floor: "",
+    area: null,
+  },
 
-  // 需求說明
+  // 共用欄位
   purpose: "",
   description: "",
-  specialRequirements: "",
-
-  // 同意條款
   agreeTerms: false,
 });
 
@@ -631,7 +596,7 @@ const rules = {
     return pattern.test(value) || "請輸入有效的電子信箱";
   },
   phone: (value) => {
-    const pattern = /^[\d-+()#\s]+$/;
+    const pattern = /^[\d+()#\s-]+$/;
     return pattern.test(value) || "請輸入有效的電話號碼";
   },
   idNumber: (value) => {
@@ -676,16 +641,6 @@ const availableAssets = ref([
   },
 ]);
 
-// 使用目的選項
-const purposeOptions = ref([
-  { value: "culture", title: "文化活動" },
-  { value: "education", title: "教育訓練" },
-  { value: "exhibition", title: "展覽展示" },
-  { value: "meeting", title: "會議研習" },
-  { value: "community", title: "社區活動" },
-  { value: "commercial", title: "商業用途" },
-  { value: "other", title: "其他用途" },
-]);
 
 // 上傳檔案
 const uploadedFiles = ref([]);
@@ -711,7 +666,8 @@ const currentApplicantData = computed(() => {
 
 // 計算屬性：表單是否完整
 const isFormComplete = computed(() => {
-  const basic =
+  // 基本資料驗證
+  const basicInfoValid =
     formData.value.applicantType === "individual"
       ? formData.value.individual.name &&
         formData.value.individual.phone &&
@@ -721,22 +677,34 @@ const isFormComplete = computed(() => {
         formData.value.organization.phone &&
         formData.value.organization.email;
 
-  return (
-    basic &&
-    formData.value.selectedAsset &&
-    formData.value.startDate &&
-    formData.value.endDate &&
+  if (!basicInfoValid) return false;
+
+  // 需求內容驗證
+  const demandInfoValid =
+    demandType.value === "specific"
+      ? !!formData.value.selectedAsset
+      : formData.value.generalDemand.assetType &&
+        formData.value.generalDemand.location &&
+        formData.value.generalDemand.area > 0;
+
+  if (!demandInfoValid) return false;
+
+  // 共用欄位驗證
+  const commonInfoValid =
     formData.value.purpose &&
     formData.value.description &&
-    formData.value.agreeTerms
-  );
+    formData.value.agreeTerms;
+
+  return commonInfoValid;
 });
+
 
 // 頁面載入時處理
 onMounted(() => {
   // 從 URL 參數獲取資產 ID
   const assetId = route.query.assetId;
   if (assetId) {
+    demandType.value = "specific";
     formData.value.selectedAsset = assetId;
     updateSelectedAssetInfo();
   }
@@ -767,6 +735,7 @@ const removeFile = (index) => {
 
 // 重置表單
 const resetForm = () => {
+  demandType.value = "specific";
   Object.assign(formData.value, {
     applicantType: "individual",
     individual: {
@@ -787,11 +756,14 @@ const resetForm = () => {
     },
     selectedAsset: "",
     assetInfo: null,
-    startDate: "",
-    endDate: "",
+    generalDemand: {
+      assetType: "建物",
+      location: "",
+      floor: "",
+      area: null,
+    },
     purpose: "",
     description: "",
-    specialRequirements: "",
     agreeTerms: false,
   });
   uploadedFiles.value = [];
@@ -808,6 +780,7 @@ const submitForm = async () => {
   try {
     // 這裡實作實際的提交邏輯
     console.log("提交申請資料:", {
+      demandType: demandType.value,
       ...formData.value,
       files: uploadedFiles.value,
     });
@@ -870,5 +843,18 @@ const checkApplicationStatus = () => {
   .form-section .v-card:hover {
     transform: none;
   }
+}
+
+.signature-line {
+  border-bottom: 1px solid #ccc;
+  min-height: 30px; /* Provide enough space for a signature */
+  margin-top: 10px;
+}
+
+.signature-line-long {
+  border-bottom: 1px solid #ccc;
+  min-height: 30px;
+  margin-top: 10px;
+  width: 100%;
 }
 </style>
