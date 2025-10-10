@@ -168,7 +168,7 @@ function formatCurrency(value) {
     <v-card-title class="text-h6 d-flex align-center justify-space-between">
       <span>需求管理</span>
       <div>
-        <v-btn color="info" prepend-icon="mdi-file-pdf-box">匯出 PDF</v-btn>
+        <v-btn color="info" prepend-icon="mdi-export">匯出檔案</v-btn>
       </div>
     </v-card-title>
     <v-card-text>

@@ -400,7 +400,10 @@ const relatedMeetings = computed(() => {
   <v-card>
     <v-card-title class="text-h6 d-flex align-center justify-space-between">
       <span>計畫管理</span>
-      <v-btn color="success" @click="openAddDialog">新增計畫記錄</v-btn>
+      <div>
+        <v-btn color="primary" class="mr-2" prepend-icon="mdi-export">匯出檔案</v-btn>
+        <v-btn color="success" @click="openAddDialog">新增計畫記錄</v-btn>
+      </div>
     </v-card-title>
     <v-card-text>
       <v-row class="mb-5">
