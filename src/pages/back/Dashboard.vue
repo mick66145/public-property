@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, nextTick } from "vue";
+import { ref, computed, onMounted, nextTick, watch } from "vue";
 import { Chart, registerables } from "chart.js";
 
 // 註冊 Chart.js 組件
@@ -29,13 +29,16 @@ const assetStats = ref({
     其他: 3,
   },
   usageTypeStats: {
-    交通: 10,
-    社福: 12,
-    教育: 8,
-    行政: 7,
-    其他: 10,
+    社福設施: 12,
+    交通設施: 10,
+    辦公廳舍: 8,
+    文化觀光設施: 9,
+    典藏及其他空間: 8,
   },
 });
+
+// 新增節省支出統計
+const savedExpenditure = ref(12345678);
 
 // 需求統計資料
 const demandStats = ref({
@@ -150,21 +153,33 @@ let statusChart = null;
 let districtChart = null;
 let usageTypeChart = null;
 
+// 顏色對照表
+const statusColors = {
+  待整理: "#9E9E9E",
+  待媒合: "#2196F3",
+  媒合中: "#FF9800",
+  已媒合: "#4CAF50",
+  已活化: "#9C27B0",
+};
+
+const usageTypeColors = {
+  社福設施: "#36A2EB",
+  交通設施: "#FF6384",
+  辦公廳舍: "#4BC0C0",
+  文化觀光設施: "#FFCE56",
+  典藏及其他空間: "#9966FF",
+};
+
 // 計算圓餅圖資料
 const statusChartData = computed(() => {
   const data = assetStats.value.statusStats;
+  const labels = Object.keys(data);
   return {
-    labels: Object.keys(data),
+    labels: labels,
     datasets: [
       {
         data: Object.values(data),
-        backgroundColor: [
-          "#9E9E9E", // 待整理 - 灰色
-          "#2196F3", // 待媒合 - 藍色
-          "#FF9800", // 媒合中 - 橘色
-          "#4CAF50", // 已媒合 - 綠色
-          "#9C27B0", // 已活化 - 紫色
-        ],
+        backgroundColor: labels.map(label => statusColors[label] || '#CCCCCC'),
         borderWidth: 2,
         borderColor: "#ffffff",
       },
@@ -192,18 +207,13 @@ const districtChartData = computed(() => {
 // 計算使用類型圓餅圖資料
 const usageTypeChartData = computed(() => {
   const data = assetStats.value.usageTypeStats;
+  const labels = Object.keys(data);
   return {
-    labels: Object.keys(data),
+    labels: labels,
     datasets: [
       {
         data: Object.values(data),
-        backgroundColor: [
-          "#FF6384", // 交通
-          "#36A2EB", // 社福
-          "#FFCE56", // 教育
-          "#4BC0C0", // 行政
-          "#9966FF", // 其他
-        ],
+        backgroundColor: labels.map(label => usageTypeColors[label] || '#CCCCCC'),
         borderWidth: 2,
         borderColor: "#ffffff",
       },
@@ -320,6 +330,20 @@ function initUsageTypeChart() {
   }
 }
 
+watch(statusChartData, (newData) => {
+  if (statusChart) {
+    statusChart.data = newData;
+    statusChart.update();
+  }
+});
+
+watch(usageTypeChartData, (newData) => {
+  if (usageTypeChart) {
+    usageTypeChart.data = newData;
+    usageTypeChart.update();
+  }
+});
+
 // 組件掛載後初始化圖表
 onMounted(async () => {
   await nextTick();
@@ -371,13 +395,28 @@ function getActivityColor(type) {
 
     <!-- 統計卡片 -->
     <v-row class="mb-6">
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" sm="6" md>
+        <v-card color="deep-purple" dark>
+          <v-card-text>
+            <div class="d-flex align-center">
+              <v-icon size="40" class="mr-3">mdi-cash-multiple</v-icon>
+              <div>
+                <div class="text-h5 font-weight-bold">
+                  ${{ formatCurrency(savedExpenditure) }}
+                </div>
+                <div class="text-subtitle-2">節省支出</div>
+              </div>
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" sm="6" md>
         <v-card color="primary" dark>
           <v-card-text>
             <div class="d-flex align-center">
               <v-icon size="40" class="mr-3">mdi-office-building</v-icon>
               <div>
-                <div class="text-h4 font-weight-bold">
+                <div class="text-h5 font-weight-bold">
                   {{ assetStats.total }}
                 </div>
                 <div class="text-subtitle-2">總資產數</div>
@@ -386,13 +425,13 @@ function getActivityColor(type) {
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" sm="6" md>
         <v-card color="success" dark>
           <v-card-text>
             <div class="d-flex align-center">
               <v-icon size="40" class="mr-3">mdi-handshake</v-icon>
               <div>
-                <div class="text-h4 font-weight-bold">
+                <div class="text-h5 font-weight-bold">
                   {{ demandStats.total }}
                 </div>
                 <div class="text-subtitle-2">需求申請</div>
@@ -401,13 +440,13 @@ function getActivityColor(type) {
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" sm="6" md>
         <v-card color="info" dark>
           <v-card-text>
             <div class="d-flex align-center">
               <v-icon size="40" class="mr-3">mdi-account-group</v-icon>
               <div>
-                <div class="text-h4 font-weight-bold">
+                <div class="text-h5 font-weight-bold">
                   {{ meetingStats.total }}
                 </div>
                 <div class="text-subtitle-2">會議記錄</div>
@@ -416,13 +455,13 @@ function getActivityColor(type) {
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" sm="6" md>
         <v-card color="warning" dark>
           <v-card-text>
             <div class="d-flex align-center">
               <v-icon size="40" class="mr-3">mdi-clipboard-text</v-icon>
               <div>
-                <div class="text-h4 font-weight-bold">
+                <div class="text-h5 font-weight-bold">
                   {{ planStats.total }}
                 </div>
                 <div class="text-subtitle-2">活化計畫</div>
@@ -497,16 +536,7 @@ function getActivityColor(type) {
             <v-row class="mt-4">
               <v-col v-for="(value, status) in assetStats.statusStats" :key="status" cols="6" sm="4">
                 <div class="text-center">
-                  <v-chip :color="status === '待整理'
-                    ? 'grey'
-                    : status === '待媒合'
-                      ? 'blue'
-                      : status === '媒合中'
-                        ? 'orange'
-                        : status === '已媒合'
-                          ? 'green'
-                          : 'purple'
-                    " size="small" class="mb-1">
+                  <v-chip :color="statusColors[status]" size="small" class="mb-1">
                     {{ status }}
                   </v-chip>
                   <div class="text-h6 font-weight-bold">{{ value }}</div>
@@ -528,16 +558,7 @@ function getActivityColor(type) {
             <v-row class="mt-4">
               <v-col v-for="(value, usageType) in assetStats.usageTypeStats" :key="usageType" cols="6" sm="4">
                 <div class="text-center">
-                  <v-chip :color="usageType === '交通'
-                    ? '#FF6384'
-                    : usageType === '社福'
-                      ? '#36A2EB'
-                      : usageType === '教育'
-                        ? '#FFCE56'
-                        : usageType === '行政'
-                          ? '#4BC0C0'
-                          : '#9966FF'
-                    " size="small" class="mb-1">
+                  <v-chip :color="usageTypeColors[usageType]" size="small" class="mb-1">
                     {{ usageType }}
                   </v-chip>
                   <div class="text-h6 font-weight-bold">{{ value }}</div>
