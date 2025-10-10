@@ -327,45 +327,63 @@ function saveInspection() {
 
                     <!-- Asset-related fields from assetDetails -->
                     <v-col cols="12" class="text-h6 mt-4 mb-2">資產詳細資訊</v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">會勘地點</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.location }}</div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">行政區</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.district }}</div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">基地座落及權屬</div>
-                        <div class="mb-3">
-                            <template v-if="selectedInspection.assetDetails?.landSection || selectedInspection.assetDetails?.landLotNumber">
-                                {{ selectedInspection.assetDetails?.landSection }}段
-                                {{ selectedInspection.assetDetails?.landLotNumber }}地號
-                            </template>
-                            <template v-if="selectedInspection.assetDetails?.owner">
-                                (所有權人: {{ selectedInspection.assetDetails?.owner }})
-                            </template>
-                        </div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">使用分區或使用編訂</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.zoning }}</div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">土地面積(m²)</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.area }}</div>
-                    </v-col>
-                    <v-col cols="12" sm="6">
-                        <div class="text-subtitle-2 mb-1">建物面積(m²)</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.floorArea }}</div>
-                    </v-col>
                     <v-col cols="12">
-                        <div class="text-subtitle-2 mb-1">使用現況</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.currentStatus }}</div>
-                    </v-col>
-                    <v-col cols="12">
-                        <div class="text-subtitle-2 mb-1">資產備註</div>
-                        <div class="mb-3">{{ selectedInspection.assetDetails?.notes }}</div>
+                        <v-expansion-panels variant="accordion">
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>基本資訊</v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <v-row>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">會勘地點</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.location }}</div>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">行政區</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.district }}</div>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">基地座落及權屬</div>
+                                            <div class="mb-3">
+                                                <template v-if="selectedInspection.assetDetails?.landSection || selectedInspection.assetDetails?.landLotNumber">
+                                                    {{ selectedInspection.assetDetails?.landSection }}段
+                                                    {{ selectedInspection.assetDetails?.landLotNumber }}地號
+                                                </template>
+                                                <template v-if="selectedInspection.assetDetails?.owner">
+                                                    (所有權人: {{ selectedInspection.assetDetails?.owner }})
+                                                </template>
+                                            </div>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">使用分區或使用編訂</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.zoning }}</div>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">土地面積(m²)</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.area }}</div>
+                                        </v-col>
+                                        <v-col cols="12" sm="6">
+                                            <div class="text-subtitle-2 mb-1">建物面積(m²)</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.floorArea }}</div>
+                                        </v-col>
+                                    </v-row>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                            <v-expansion-panel>
+                                <v-expansion-panel-title>其他資訊</v-expansion-panel-title>
+                                <v-expansion-panel-text>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <div class="text-subtitle-2 mb-1">使用現況</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.currentStatus }}</div>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <div class="text-subtitle-2 mb-1">資產備註</div>
+                                            <div class="mb-3">{{ selectedInspection.assetDetails?.notes }}</div>
+                                        </v-col>
+                                    </v-row>
+                                </v-expansion-panel-text>
+                            </v-expansion-panel>
+                        </v-expansion-panels>
                     </v-col>
                 </v-row>
             </v-card-text>

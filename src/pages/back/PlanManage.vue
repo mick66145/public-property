@@ -482,37 +482,55 @@ const relatedMeetings = computed(() => {
             <div class="mb-3">{{ selectedPlan.timeline }}</div>
           </v-col>
           <!-- 新增的欄位 -->
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">地點</div>
-            <div class="mb-3">{{ selectedPlan.location }}</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">地號</div>
-            <div class="mb-3">{{ selectedPlan.landLotNumber }}</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">面積(m²)</div>
-            <div class="mb-3">{{ formatCurrency(selectedPlan.area) }} m²</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">計劃用途</div>
-            <div class="mb-3">{{ selectedPlan.plannedUsage }}</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">需求機關</div>
-            <div class="mb-3">{{ selectedPlan.demandingAgency }}</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">土地公告現值</div>
-            <div class="mb-3">{{ formatCurrency(selectedPlan.landValue) }} 元</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">房屋課稅現值</div>
-            <div class="mb-3">{{ formatCurrency(selectedPlan.houseValue) }} 元</div>
-          </v-col>
-          <v-col cols="12" sm="6">
-            <div class="text-subtitle-2 mb-1">節流效益(元)</div>
-            <div class="mb-3">{{ formatCurrency(selectedPlan.savingsBenefit) }} 元</div>
+          <v-col cols="12">
+            <v-expansion-panels variant="accordion">
+              <v-expansion-panel>
+                <v-expansion-panel-title>資產基本資訊</v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">地點</div>
+                      <div class="mb-3">{{ selectedPlan.location }}</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">地號</div>
+                      <div class="mb-3">{{ selectedPlan.landLotNumber }}</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">面積(m²)</div>
+                      <div class="mb-3">{{ formatCurrency(selectedPlan.area) }} m²</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">計劃用途</div>
+                      <div class="mb-3">{{ selectedPlan.plannedUsage }}</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">需求機關</div>
+                      <div class="mb-3">{{ selectedPlan.demandingAgency }}</div>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+              <v-expansion-panel>
+                <v-expansion-panel-title>資產價值資訊</v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">土地公告現值</div>
+                      <div class="mb-3">{{ formatCurrency(selectedPlan.landValue) }} 元</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">房屋課稅現值</div>
+                      <div class="mb-3">{{ formatCurrency(selectedPlan.houseValue) }} 元</div>
+                    </v-col>
+                    <v-col cols="12" sm="6">
+                      <div class="text-subtitle-2 mb-1">節流效益(元)</div>
+                      <div class="mb-3">{{ formatCurrency(selectedPlan.savingsBenefit) }} 元</div>
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </v-col>
           <!-- 結束新增的欄位 -->
           <v-col cols="12">
