@@ -238,9 +238,6 @@ function formatCurrency(value) {
             <v-text-field label="申請單位/民眾" :model-value="selectedDemand.applicant" readonly />
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-text-field label="所屬單位" :model-value="selectedDemand.department" readonly />
-          </v-col>
-          <v-col cols="12" sm="6" md="4">
             <v-text-field label="申請日期" :model-value="selectedDemand.applyDate" readonly />
           </v-col>
 
@@ -293,6 +290,35 @@ function formatCurrency(value) {
           </v-col>
           <v-col cols="12">
             <v-text-field label="電子信箱" :model-value="selectedDemand.email" readonly />
+          </v-col>
+
+          <v-col cols="12"><v-divider class="my-3"></v-divider></v-col>
+
+          <!-- 相關文件 -->
+          <v-col cols="12">
+            <div class="text-h6 mb-2">相關文件</div>
+          </v-col>
+          <v-col cols="12">
+            <v-list density="compact">
+              <v-list-item>
+                <template #prepend>
+                  <v-icon>mdi-file-document</v-icon>
+                </template>
+                <v-list-item-title>申請計畫書.pdf</v-list-item-title>
+                <template #append>
+                  <v-btn icon="mdi-download" size="small" variant="text"></v-btn>
+                </template>
+              </v-list-item>
+              <v-list-item>
+                <template #prepend>
+                  <v-icon>mdi-file-image</v-icon>
+                </template>
+                <v-list-item-title>身分證明文件.jpg</v-list-item-title>
+                <template #append>
+                  <v-btn icon="mdi-download" size="small" variant="text"></v-btn>
+                </template>
+              </v-list-item>
+            </v-list>
           </v-col>
         </v-row>
       </v-card-text>

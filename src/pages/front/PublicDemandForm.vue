@@ -73,16 +73,6 @@
                       </v-col>
                       <v-col cols="12" md="6">
                         <v-text-field
-                          v-model="formData.individual.idNumber"
-                          label="身分證字號"
-                          :rules="[rules.required, rules.idNumber]"
-                          variant="outlined"
-                          density="compact"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-text-field
                           v-model="formData.individual.phone"
                           label="聯絡電話"
                           :rules="[rules.required, rules.phone]"
@@ -101,14 +91,6 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="formData.individual.address"
-                          label="通訊地址"
-                          variant="outlined"
-                          density="compact"
-                        ></v-text-field>
-                      </v-col>
                     </v-row>
                   </div>
 
@@ -120,16 +102,6 @@
                           v-model="formData.organization.name"
                           label="機關名稱"
                           :rules="[rules.required]"
-                          variant="outlined"
-                          density="compact"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="4">
-                        <v-text-field
-                          v-model="formData.organization.taxId"
-                          label="統一編號"
-                          :rules="[rules.required, rules.taxId]"
                           variant="outlined"
                           density="compact"
                           required
@@ -173,14 +145,6 @@
                           required
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="formData.organization.address"
-                          label="機關地址"
-                          variant="outlined"
-                          density="compact"
-                        ></v-text-field>
-                      </v-col>
                     </v-row>
                   </div>
                 </v-card-text>
@@ -192,101 +156,73 @@
                   <v-icon class="mr-2">mdi-office-building</v-icon>
                   申請資產與需求說明
                 </v-card-title>
-                <v-card-text class="pa-6">
-                  <v-radio-group v-model="demandType" inline class="mb-4">
-                    <v-radio label="指定現有資產" value="specific" color="primary"></v-radio>
-                    <v-radio label="提出一般需求" value="general" color="primary"></v-radio>
-                  </v-radio-group>
-
-                  <!-- A. 指定現有資產 -->
-                  <div v-if="demandType === 'specific'">
-                    <v-row>
-                      <v-col cols="12">
-                        <v-select v-model="formData.selectedAsset" :items="availableAssets" item-title="name"
-                          item-value="id" label="選擇申請資產" :rules="demandType === 'specific' ? [rules.required] : []"
-                          variant="outlined" density="compact" @update:modelValue="onAssetChange" required>
-                          <template #item="{ props, item }">
-                            <v-list-item v-bind="props">
-                              <v-list-item-title>{{
-                                item.raw.name
-                              }}</v-list-item-title>
-                              <v-list-item-subtitle>{{
-                                item.raw.location
-                              }}</v-list-item-subtitle>
-                            </v-list-item>
-                          </template>
-                        </v-select>
-                      </v-col>
-                    </v-row>
-                    <v-alert v-if="formData.assetInfo" type="info" variant="tonal" class="mt-4">
-                      <div class="d-flex align-center">
-                        <v-icon class="mr-3">mdi-information</v-icon>
-                        <div>
-                          <div class="font-weight-bold">
-                            {{ formData.assetInfo.name }}
-                          </div>
-                          <div class="text-body-2">
-                            {{ formData.assetInfo.location }}
-                          </div>
-                          <v-chip size="small" :color="formData.assetInfo.status === '已活化'
-                            ? 'success'
-                            : 'warning'
-                            " class="mt-1">
-                            {{ formData.assetInfo.status }}
-                          </v-chip>
-                        </div>
-                      </div>
-                    </v-alert>
-                  </div>
-
-                  <!-- B. 提出一般需求 -->
-                  <div v-if="demandType === 'general'">
-                    <v-row>
-                      <v-col cols="12" md="6">
-                        <v-radio-group v-model="formData.generalDemand.assetType" inline label="土地或建物"
-                          :rules="demandType === 'general' ? [rules.required] : []">
-                          <v-radio label="土地" value="土地" color="primary"></v-radio>
-                          <v-radio label="建物" value="建物" color="primary"></v-radio>
-                        </v-radio-group>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-text-field v-model="formData.generalDemand.location" label="希望地點"
-                          :rules="demandType === 'general' ? [rules.required] : []" variant="outlined"
-                          density="compact" required></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-text-field v-model="formData.generalDemand.floor" label="希望樓層" variant="outlined"
-                          density="compact"></v-text-field>
-                      </v-col>
-                      <v-col cols="12" md="6">
-                        <v-text-field v-model="formData.generalDemand.area" label="面積(㎡)" type="number"
-                          :rules="demandType === 'general' ? [rules.required] : []" variant="outlined"
-                          density="compact" required suffix="㎡"></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </div>
-
-
-                  <!-- 需求說明 (共用) -->
-                  <v-row class="mt-4">
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="formData.purpose"
-                        label="需求用途"
-                        :rules="[rules.required]"
-                        variant="outlined"
-                        density="compact"
-                        placeholder="例如：成立社區長照關懷據點、舉辦社區運動會"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea v-model="formData.description" label="詳細說明(敘明必要性、急迫性及經費來源)"
-                        :rules="[rules.required]" variant="outlined" rows="4"
-                        placeholder="請詳細說明您的使用需求、活動內容、預期效益、經費來源等..." required></v-textarea>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
+                                <v-card-text class="pa-6">
+                                  <!-- A. 指定現有資產 -->
+                                  <div>
+                                    <v-row>
+                                      <v-col cols="12">
+                                        <v-select v-model="formData.selectedAsset" :items="availableAssets" item-title="name"
+                                          item-value="id" label="選擇申請資產" :rules="[rules.required]"
+                                          variant="outlined" density="compact" @update:modelValue="onAssetChange" required>
+                                          <template #item="{ props, item }">
+                                            <v-list-item v-bind="props">
+                                              <v-list-item-title>{{ item.raw.name }}</v-list-item-title>
+                                              <v-list-item-subtitle>{{ item.raw.location }}</v-list-item-subtitle>
+                                            </v-list-item>
+                                          </template>
+                                        </v-select>
+                                      </v-col>
+                                    </v-row>
+                                    <v-alert v-if="formData.assetInfo" type="info" variant="tonal" class="mt-4">
+                                      <div class="d-flex align-center">
+                                        <v-icon class="mr-3">mdi-information</v-icon>
+                                        <div>
+                                          <div class="font-weight-bold">
+                                            {{ formData.assetInfo.name }}
+                                          </div>
+                                          <div class="text-body-2">
+                                            {{ formData.assetInfo.location }}
+                                          </div>
+                                          <v-chip size="small" :color="formData.assetInfo.status === '已活化'
+                                            ? 'success'
+                                            : 'warning'
+                                            " class="mt-1">
+                                            {{ formData.assetInfo.status }}
+                                          </v-chip>
+                                        </div>
+                                      </div>
+                                                        </v-alert>
+                                                        <v-row v-if="formData.assetInfo?.type === '建築物'" class="mt-4">
+                                                          <v-col cols="12">
+                                                            <v-text-field
+                                                              v-model="formData.desiredFloor"
+                                                              label="希望樓層"
+                                                              variant="outlined"
+                                                              density="compact"
+                                                            ></v-text-field>
+                                                          </v-col>
+                                                        </v-row>
+                                                      </div>                
+                                  <!-- 需求說明 (共用) -->
+                                  <v-row class="mt-4">
+                                    <v-col cols="12">
+                                      <v-text-field
+                                        v-model="formData.purpose"
+                                        label="需求用途"
+                                        :rules="[rules.required]"
+                                        variant="outlined"
+                                        density="compact"
+                                        placeholder="例如：成立社區長照關懷據點、舉辦社區運動會"
+                                        required
+                                      ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                      <v-textarea v-model="formData.description" label="詳細說明(敘明必要性、急迫性及經費來源)"
+                                        :rules="[rules.required]" variant="outlined" rows="4"
+                                        placeholder="請詳細說明您的使用需求、活動內容、預期效益、經費來源等..." required></v-textarea>
+                                    </v-col>
+                                  </v-row>
+                                </v-card-text>
               </v-card>
 
               <!-- 3. 相關文件上傳 -->
@@ -542,10 +478,6 @@ import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
 
-// 需求類型: specific (指定現有資產) | general (提出一般需求)
-const demandType = ref("specific");
-
-// 表單資料
 const formData = ref({
   // 申請人類型
   applicantType: "individual", // individual | organization
@@ -573,14 +505,7 @@ const formData = ref({
   // A. 指定資產
   selectedAsset: "",
   assetInfo: null,
-
-  // B. 一般需求
-  generalDemand: {
-    assetType: "建物",
-    location: "",
-    floor: "",
-    area: null,
-  },
+  desiredFloor: "", // 新增希望樓層欄位
 
   // 共用欄位
   purpose: "",
@@ -598,14 +523,6 @@ const rules = {
   phone: (value) => {
     const pattern = /^[\d+()#\s-]+$/;
     return pattern.test(value) || "請輸入有效的電話號碼";
-  },
-  idNumber: (value) => {
-    const pattern = /^[A-Z]\d{9}$/;
-    return pattern.test(value) || "請輸入有效的身分證字號";
-  },
-  taxId: (value) => {
-    const pattern = /^\d{8}$/;
-    return pattern.test(value) || "請輸入有效的統一編號";
   },
 };
 
@@ -679,13 +596,8 @@ const isFormComplete = computed(() => {
 
   if (!basicInfoValid) return false;
 
-  // 需求內容驗證
-  const demandInfoValid =
-    demandType.value === "specific"
-      ? !!formData.value.selectedAsset
-      : formData.value.generalDemand.assetType &&
-        formData.value.generalDemand.location &&
-        formData.value.generalDemand.area > 0;
+  // 需求內容驗證 (只考慮指定資產)
+  const demandInfoValid = !!formData.value.selectedAsset;
 
   if (!demandInfoValid) return false;
 
@@ -704,7 +616,6 @@ onMounted(() => {
   // 從 URL 參數獲取資產 ID
   const assetId = route.query.assetId;
   if (assetId) {
-    demandType.value = "specific";
     formData.value.selectedAsset = assetId;
     updateSelectedAssetInfo();
   }
@@ -716,6 +627,10 @@ const updateSelectedAssetInfo = () => {
     (a) => a.id === formData.value.selectedAsset
   );
   formData.value.assetInfo = asset || null;
+  // 清除希望樓層，如果資產類型不是建築物
+  if (formData.value.assetInfo?.type !== '建築物') {
+    formData.value.desiredFloor = '';
+  }
 };
 
 // 處理資產選擇變更
@@ -735,33 +650,23 @@ const removeFile = (index) => {
 
 // 重置表單
 const resetForm = () => {
-  demandType.value = "specific";
   Object.assign(formData.value, {
     applicantType: "individual",
     individual: {
       name: "",
-      idNumber: "",
       phone: "",
       email: "",
-      address: "",
     },
     organization: {
       name: "",
-      taxId: "",
       contactPerson: "",
       contactTitle: "",
       phone: "",
       email: "",
-      address: "",
     },
     selectedAsset: "",
     assetInfo: null,
-    generalDemand: {
-      assetType: "建物",
-      location: "",
-      floor: "",
-      area: null,
-    },
+    desiredFloor: "",
     purpose: "",
     description: "",
     agreeTerms: false,
@@ -780,7 +685,6 @@ const submitForm = async () => {
   try {
     // 這裡實作實際的提交邏輯
     console.log("提交申請資料:", {
-      demandType: demandType.value,
       ...formData.value,
       files: uploadedFiles.value,
     });
