@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from "vue";
-import html2pdf from 'html2pdf.js';
 
 const headers = [
   { title: "需求編號", value: "id" },
@@ -211,7 +210,7 @@ function formatCurrency(value) {
                       </v-chip>
                     </template>
                   </v-data-table>
-        
+
 
                 </div>
       </div>
