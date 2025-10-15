@@ -315,33 +315,7 @@
                 </v-card-text>
               </v-card>
 
-              <!-- 簽名區塊 -->
-              <v-card elevation="4" class="mt-6">
-                <v-card-title class="bg-grey-lighten-2 text-grey-darken-3">
-                  <v-icon class="mr-2">mdi-pencil</v-icon>
-                  承辦單位簽章
-                </v-card-title>
-                <v-card-text class="pa-6">
-                  <v-row>
-                    <v-col cols="12" md="4">
-                      <p class="text-body-1 font-weight-bold mb-2">承辦人：</p>
-                      <div class="signature-line"></div>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <p class="text-body-1 font-weight-bold mb-2">單位主管：</p>
-                      <div class="signature-line"></div>
-                    </v-col>
-                    <v-col cols="12" md="4">
-                      <p class="text-body-1 font-weight-bold mb-2">機關首長：</p>
-                      <div class="signature-line"></div>
-                    </v-col>
-                    <v-col cols="12" class="mt-4">
-                      <p class="text-body-1 font-weight-bold mb-2">聯絡電話：</p>
-                      <div class="signature-line-long"></div>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
+
             </v-form>
           </v-col>
 
